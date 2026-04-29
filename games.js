@@ -166,7 +166,7 @@
       if (keys['arrowdown'] || keys['s']) { dx = 0; dy = 1; }
     }
 
-    setInterval(updateDir, 100);
+setInterval(updateDir, 120 - Math.min(score/10, 30));
     gameLoop();
   }
 
