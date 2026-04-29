@@ -166,7 +166,7 @@
       if (keys['arrowdown'] || keys['s']) { dx = 0; dy = 1; }
     }
 
-setInterval(updateDir, 120 - Math.min(score/10, 30));
+setInterval(updateDir, 150);
     gameLoop();
   }
 
@@ -264,7 +264,7 @@ setInterval(updateDir, 120 - Math.min(score/10, 30));
       if (keys['arrowright'] || keys['d']) ship.y = Math.min(canvas.height - 30, ship.y + 4);
       
       ship.x += ship.speed;
-      scroll += 3;
+      scroll += 2;
       score += ship.speed > 0 ? 1 : 0;
 
       // Spawn obstacles
