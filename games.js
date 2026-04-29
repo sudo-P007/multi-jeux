@@ -247,87 +247,108 @@ setInterval(updateDir, 150);
     gameLoop();
   }
 
-  // GAME 3: Space Race
-  function startRace() {
+  // GAME 3: Flappy Bird Clone
+  function startFlappy() {
     currentGame = 2;
     score = 0;
-    let ship = {x: 100, y: canvas.height/2, speed: 0};
-    let obstacles = [];
+    let bird = {x: 100, y: canvas.height/2, vy: 0, r: 20};
+    let pipes = [];
     let scroll = 0;
+    let gameSpeed = 2;
     menu.style.display = 'none';
 
     function gameLoop() {
-      // Input
-      if (keys['arrowup'] || keys['w']) ship.speed = Math.min(6, ship.speed + 0.3);
-      if (keys['arrowdown'] || keys['s']) ship.speed = Math.max(-2, ship.speed - 0.3);
-      if (keys['arrowleft'] || keys['a']) ship.y = Math.max(30, ship.y - 4);
-      if (keys['arrowright'] || keys['d']) ship.y = Math.min(canvas.height - 30, ship.y + 4);
+      // Bird physics
+      bird.vy += 0.4;
+      bird.y += bird.vy;
       
-      ship.x += ship.speed;
-      scroll += 2;
-      score += ship.speed > 0 ? 1 : 0;
-
-      // Spawn obstacles
-      if (Math.random() < 0.02) {
-        obstacles.push({y: 0, x: canvas.width + 50, size: 40 + Math.random() * 30});
+      // Jump
+      if (keys[' '] || keys['arrowup'] || keys['w']) {
+        bird.vy = -8;
+        playSound(600, 0.08);
       }
-      
-      // Update obstacles
-      obstacles = obstacles.filter(obs => {
-        obs.x -= 5;
-        obs.y += Math.sin(obs.x * 0.01) * 2;
-        return obs.x > -100;
+
+      scroll += gameSpeed;
+      score = Math.floor(scroll / 200);
+
+      // Spawn pipes
+      if (scroll % 300 < 2) {
+        const gapY = 150 + Math.random() * 200;
+        pipes.push({x: canvas.width, top: gapY - 400, bottom: canvas.height - gapY - 50, passed: false});
+      }
+
+      // Update pipes
+      pipes = pipes.filter(pipe => {
+        pipe.x -= gameSpeed;
+        if (!pipe.passed && pipe.x + 60 < bird.x) {
+          pipe.passed = true;
+          playSound(800, 0.1);
+        }
+        return pipe.x > -80;
       });
 
       // Collision
-      for (let obs of obstacles) {
-        const dx = ship.x - obs.x;
-        const dy = ship.y - obs.y;
-        if (Math.sqrt(dx*dx + dy*dy) < 30) {
-          playSound(150, 0.3);
-          emitParticles(ship.x, ship.y, 25, '#ff4444');
-          menu.style.display = 'block';
-          return;
-        }
+      if (bird.y - bird.r < 0 || bird.y + bird.r > canvas.height) {
+        emitParticles(bird.x, bird.y, 30, '#ff4444');
+        playSound(200, 0.3);
+        menu.style.display = 'block';
+        return;
       }
+      pipes.forEach(pipe => {
+        if (bird.x + bird.r > pipe.x && bird.x - bird.r < pipe.x + 60) {
+          if (bird.y - bird.r < pipe.top || bird.y + bird.r > pipe.bottom) {
+            emitParticles(bird.x, bird.y, 30, '#ff4444');
+            playSound(200, 0.3);
+            menu.style.display = 'block';
+            return;
+          }
+        }
+      });
 
       // Draw
-      ctx.fillStyle = '#000';
+      ctx.fillStyle = '#87ceeb';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Stars
-      ctx.fillStyle = '#fff';
-      for (let i = 0; i < 50; i++) {
-        const x = (i * 137 + scroll * 0.5) % canvas.width;
-        const y = (i * 89) % canvas.height;
-        const size = (Math.sin(scroll * 0.01 + i) + 1) * 1.5;
-        ctx.fillRect(x, y, size, size);
-      }
-      
-      // Obstacles
-      ctx.fillStyle = '#ff4444';
-      obstacles.forEach(obs => {
+      // Clouds
+      ctx.fillStyle = 'rgba(255,255,255,0.8)';
+      for (let i = 0; i < 5; i++) {
+        const x = (canvas.width * i / 5 + scroll * 0.3) % canvas.width;
         ctx.beginPath();
-        ctx.arc(obs.x, obs.y, obs.size/2, 0, Math.PI * 2);
+        ctx.arc(x, canvas.height * 0.3 + Math.sin(i) * 30, 40, 0, Math.PI * 2);
+        ctx.arc(x + 30, canvas.height * 0.3 + Math.sin(i) * 30, 50, 0, Math.PI * 2);
+        ctx.arc(x - 30, canvas.height * 0.3 + Math.sin(i) * 30, 45, 0, Math.PI * 2);
         ctx.fill();
-      });
-      
-      // Ship
-      ctx.fillStyle = '#00aaff';
-      ctx.beginPath();
-      ctx.moveTo(ship.x, ship.y - 15);
-      ctx.lineTo(ship.x - 10, ship.y + 10);
-      ctx.lineTo(ship.x + 10, ship.y + 10);
-      ctx.fill();
-      
-      ctx.shadowColor = '#00aaff';
-      ctx.shadowBlur = 20;
-      ctx.fillStyle = '#ffff88';
-      ctx.fillRect(ship.x - 3, ship.y - 12, 6, 8);
-      ctx.shadowBlur = 0;
+      }
 
-      scoreEl.textContent = `Distance: ${Math.floor(score)}`;
-      instrEl.textContent = 'Arrows/WASD: Move + Accelerate';
+      // Pipes
+      ctx.fillStyle = '#228b22';
+      pipes.forEach(pipe => {
+        ctx.fillRect(pipe.x, 0, 60, pipe.top);
+        ctx.fillRect(pipe.x, pipe.bottom, 60, canvas.height - pipe.bottom);
+        ctx.fillStyle = '#32cd32';
+        ctx.fillRect(pipe.x - 5, pipe.top - 20, 70, 20);
+        ctx.fillRect(pipe.x - 5, pipe.bottom, 70, 20);
+        ctx.fillStyle = '#228b22';
+      });
+
+      // Bird
+      ctx.save();
+      ctx.translate(bird.x, bird.y);
+      ctx.rotate(bird.vy * 0.05);
+      ctx.fillStyle = '#ffd700';
+      ctx.beginPath();
+      ctx.arc(0, 0, bird.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#ffaa00';
+      ctx.fillRect(-8, -4, 16, 8);
+      ctx.fillStyle = '#000';
+      ctx.beginPath();
+      ctx.arc(6, -4, 3, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+
+      scoreEl.textContent = `Score: ${score}`;
+      instrEl.textContent = 'SPACE/UP: Jump | Avoid Pipes!';
       
       requestAnimationFrame(gameLoop);
     }

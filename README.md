@@ -11,7 +11,7 @@ index.html ← MAIN ENTRY (Live Server recommended)
 |------|----------|----------|
 | 🐍 Snake Patrol | WASD/Arrows | Trails, Particles |
 | 🏓 Pong Battle | WASD/Arrows | AI Opponent, Physics |
-| 🚀 Space Race | WASD/Arrows | Infinite Runner |
+| 🐦 Flappy Bird | SPACE/UP | Pipe Dodge Classic |
 | 🎯 Tank Wars | AD+Space | Shooting Enemies |
 | 🧱 Tetris Defense | AD+S | Block Survival |
 
