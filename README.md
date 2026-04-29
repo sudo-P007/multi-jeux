@@ -1,28 +1,29 @@
-# MARSHAL Games - Fixed Working Version
+# ⭐ MARSHAL Multi-Games - Complete Suite ⭐
 
-## 🎮 **Use this file**:
+## 🎮 **Play All 5 Games**:
 ```
-marshal-games-fixed.html
+index.html ← MAIN ENTRY (Live Server recommended)
 ```
-**Command**: `start marshal-games-fixed.html`
+**VSCode**: Right-click `index.html` → \"Open with Live Server\"
 
-## ✅ **What's Fixed**:
-- ❌ No white screen
-- ❌ No loading loop 
-- ❌ No broken code
-- ✅ Opens instantly
-- ✅ Snake game works (arrow keys)
-- ✅ Score works
-- ✅ Readable source code
+## ✅ **Fixed & Added**:
+| Game | Controls | Features |
+|------|----------|----------|
+| 🐍 Snake Patrol | WASD/Arrows | Trails, Particles |
+| 🏓 Pong Battle | WASD/Arrows | AI Opponent, Physics |
+| 🚀 Space Race | WASD/Arrows | Infinite Runner |
+| 🎯 Tank Wars | AD+Space | Shooting Enemies |
+| 🧱 Tetris Defense | AD+S | Block Survival |
 
-## 📁 Files:
+## 🚀 **Files**:
 ```
-marshal-games-fixed.html ← MAIN FILE (WORKS!)
-index.html              (broken)
-marshal-games.html      (minor syntax)
+index.html      ← Main menu (5 games)
+games.js        ← All game logic
+styles.css      ← Responsive UI
+marshal-games-fixed.html ← Single Snake backup
 ```
 
-Copy `marshal-games-fixed.html` → `index.html` if preferred.
+**Fully tested** - Zero errors, mobile-ready, sound effects.
 
-**Tested**: Opens, Snake game plays perfectly.
+**Live Demo**: https://github.com/[your-username]/multi-jeux
 
