@@ -553,7 +553,7 @@ setInterval(updateDir, 150);
     switch(id) {
       case 0: startSnake(); break;
       case 1: startPong(); break;
-      case 2: startRace(); break;
+      case 2: startFlappy(); break;
       case 3: startTank(); break;
       case 4: startTetris(); break;
     }
