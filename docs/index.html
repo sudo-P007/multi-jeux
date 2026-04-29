@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⭐ MARSHAL Multi-Games ⭐</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="marshal-badge">⭐</div>
+    <h1>MARSHAL Games</h1>
+    <p class="subtitle">5 Games • Touch/Mouse/Keyboard • Sound FX</p>
+    
+    <div id="gameContainer">
+        <canvas id="canvas"></canvas>
+        <div id="menu">
+            <h2>Select Your Game</h2>
+            <button onclick="startGame(0)">🐍 Snake Patrol</button>
+            <button onclick="startGame(1)">🏓 Pong Battle</button>
+            <button onclick="startGame(2)">🚀 Space Race</button>
+            <button onclick="startGame(3)">🎯 Tank Wars</button>
+            <button onclick="startGame(4)">🧱 Tetris Defense</button>
+        </div>
+        <div id="score"></div>
+        <div id="instructions"></div>
+    </div>
+
+    <script src="games.js"></script>
+</body>
+</html>
